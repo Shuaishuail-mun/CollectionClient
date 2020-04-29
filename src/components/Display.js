@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 class Display extends React.Component {
     constructor(props) {
         super(props);
@@ -10,7 +11,7 @@ class Display extends React.Component {
     }
 
     getTopMovies() {
-        fetch('http://localhost:3000/movie', {
+        fetch(process.env.REACT_APP_SERVER + '/movie', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

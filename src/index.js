@@ -3,8 +3,21 @@ import ReactDOM from 'react-dom';
 import './css/index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import {IntlProvider} from 'react-intl';
+import messages_zh from "./translations/zh.json";
+import messages_en from "./translations/en.json";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const messages = {
+    'zh': messages_zh,
+    'en': messages_en
+};
+// const language = navigator.language.split(/[-_]/)[0];
+const language = 'en';
+ReactDOM.render(
+    <IntlProvider locale={language} key={language} messages={messages[language]}>
+        <App />
+    </IntlProvider>,
+    document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
