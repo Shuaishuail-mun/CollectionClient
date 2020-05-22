@@ -1,7 +1,9 @@
 import React from 'react';
-import '../../css/Modal.css';
+import '../../css/Modal.scss';
 import Form from './Form';
 import axios from 'axios';
+import sha1 from 'sha1';
+import cookie from 'react-cookies';
 
 class LoginPanel extends React.Component {
     constructor(props) {
@@ -15,13 +17,24 @@ class LoginPanel extends React.Component {
     onSubmit(data, event) {
         event.preventDefault();
         // alert(JSON.stringify(data));
-        axios.post(process.env.REACT_APP_SERVER + '/users/register', { data })
+        let type = this.state.type;
+        data.passWord = sha1(data.passWord);
+        axios.post(process.env.REACT_APP_SERVER + '/users/' + type, { data })
             .then(res => {
-                if (res.data.code === 1) {
-                    document.cookie = "name=" + data.userName;
+                if (res.data.auth) {
+                    cookie.save('name', data.userName, { path: '/', maxAge: 1000});
+                    cookie.save('token', res.data.token, {path: '/', maxAge: 1000});
+                    // document.cookie = "name=" + data.userName;
                     window.location.reload();
+                } else {
+                    if (type === 'login') {
+                        console.log("user not exists or password not correct");
+                    } else {
+                        console.log("register failed");
+                    }
                 }
             })
+
     };
 
     changeType() {

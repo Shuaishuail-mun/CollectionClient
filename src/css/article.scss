@@ -1,26 +1,10 @@
 .left {
   text-align: center;
-  & > img {
-    width: 200px;
-    height:200px;
-  }
-  .list-group {
-    margin: 0 auto;
-    width: 200px;
-    .active {
-      background-color: rgba(46, 141, 237, 0.55);
-      border: none;
-    }
-    a {
-      cursor: context-menu;
-    }
-  }
 }
 .right {
   .recent_notes {
     background-color: white;
     color: black;
-    padding: 10px;
     .note {
       border-top: 1px dashed #2e8ded;
       margin: 30px 0 30px 0;

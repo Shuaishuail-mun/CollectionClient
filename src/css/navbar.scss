@@ -1,0 +1,41 @@
+.navbar-dark .navbar-brand {
+  font-family: "Brush Script MT";
+  font-size: 1.9em;
+  color: #904343;
+  padding-top: 0rem;
+  line-height: 0;
+  &:hover {
+    color: #6e3737;
+  }
+}
+.navbar-dark .navbar-nav .nav-link {
+  font-family: georgia, serif;
+  font-size: 1em;
+  font-weight: bold;
+  letter-spacing: 0pt;
+  word-spacing: -1pt;
+  // text-shadow: 0.5px 0.5px #5e2f2f;
+  color: rgba(204, 84, 76, 0.8);
+  &:hover{
+    color: white;
+  }
+}
+.search-form {
+  margin-right: 10px;
+}
+.welcome-nav{
+  font-weight: bold;
+  color: #904343;
+  margin-right: 10px;
+  &:hover {
+    color: #6e3737;
+  }
+}
+.show-search-result{
+  background-color: #fff8ee;
+  a{
+    &:hover{
+      background-color: #ffceba;
+    }
+  }
+}

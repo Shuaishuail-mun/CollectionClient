@@ -1,0 +1,103 @@
+.single-article{
+  .left, .right {
+    margin-top: 50px;
+    // border: 1px solid red;
+  }
+  .left{
+    font-size: 1.5em;
+    color: #ff8d43;
+    font-family: 楷体;
+    img {
+      width: 100%;
+      height: auto;
+      box-shadow: 0 0 10px #dccb8b;
+    }
+  }
+  .right {
+    background-color: white;
+    color: black;
+    border-radius: 2px;
+    box-shadow: 0 0 10px #dccb8b;
+    padding: 10px;
+    .header {
+      font-family: 华文行楷;
+      font-size: 2em;
+    }
+    .date {
+      // text-align: right;
+    }
+    .heat {
+      text-align: right;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      i {
+        opacity: 0.6;
+        margin-left: 30px;
+      }
+      .favored {
+        color: red;
+        span{
+          color: black;
+        }
+      }
+    }
+    .comment {
+      .list-group {
+        a {
+          background-color: rgba(255, 250, 225, 0.39);
+          position: relative;
+          >a{
+            color: #2e8ded;
+          }
+          img {
+            width: 30px;
+            height: 30px;
+            border-radius: 3px;
+            opacity: 0.8;
+            &:hover {
+              opacity: 1;
+              box-shadow: 0 0 5px #4b4b4b;
+            }
+          }
+          button {
+            position: absolute;
+            border-bottom: 1px solid #d4d4d4;
+            border-left: 1px solid #d4d4d4;
+            top: 0;
+            right: 0;
+          }
+        }
+      }
+    }
+    .edit_comment {
+      > div {
+        // border: 1px solid red;
+        i {
+          // font-size: 1.5em;
+        }
+        .dropdown {
+          .dropdown-toggle {
+            border-radius: 0;
+            border:none;
+          }
+          ul {
+            min-width: 500px;
+            text-align: center;
+            li{
+              button {
+                width: 150px;
+                padding: 3px;
+                margin: 3px;
+                border: none;
+                background: none;
+                &:hover {
+                  background-color: #fedabb;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../css/article.scss';
-import RecentArtl from "./RecentArtl";
 import MostPopular from "./MostPopular";
+import RecentArtls from "./RecentArtls";
 import {FormattedMessage, FormattedHTMLMessage} from 'react-intl';
 
 class Main extends React.Component {
@@ -21,21 +21,31 @@ class Main extends React.Component {
     render() {
         return (
             <div>
-                <div className="container">
+                <div className="container-fluid">
                     <div className="row">
-                        <div className="left col-sm-2">
-                            <div className="list-group">
-                                <a className={this.state.panelNum == 0 ? "list-group-item active" : "list-group-item"} onClick={(e) => this.handleClick(0, e)}>
+                        <div className="left col-sm-2 align-self-start">
+                            <div className="btn-group-vertical position-fixed" style={{opacity: '0.6'}}>
+                                    <button
+                                        onClick={(e) => this.handleClick(0, e)}
+                                        type="button" class={`btn ${this.state.panelNum === 0? 'btn-danger': 'btn-outline-secondary'}`}>
+                                        Newly Posted
+                                    </button>
+                                    <button
+                                        onClick={(e) => this.handleClick(1, e)}
+                                        type="button" className={`btn ${this.state.panelNum === 1? 'btn-danger': 'btn-outline-secondary'}`}>
+                                        Most Popular
+                                    </button>
+                                {/*<a className={this.state.panelNum == 0 ? "list-group-item active" : "list-group-item"} onClick={(e) => this.handleClick(0, e)}>
                                     <FormattedMessage id="article.recent"/>
                                 </a>
-                                <a className={this.state.panelNum == 1 ? "list-group-item active" : "list-group-item"} onClick={(e) => this.handleClick(1, e)}>
+                                <a className={this.state.panelNum == 1 ? "list-group-item active" : "list-group-item"} >
                                     <FormattedMessage id="article.popular"/>
-                                </a>
+                                </a>*/}
                             </div>
                         </div>
-                        <div className="right col-sm-9">
-                            {this.state.panelNum == 0 && <RecentArtl />}
-                            {this.state.panelNum == 1 && <MostPopular />}
+                        <div className="right col-sm-8 align-self-end">
+                            {this.state.panelNum === 1 && <MostPopular />}
+                            {this.state.panelNum === 0 && <RecentArtls />}
                         </div>
                     </div>
                 </div>

@@ -8,7 +8,7 @@ export default function Form(props) {
     return (
         <form onSubmit={handleSubmit(props.onSubmit)}>
             <div className="form-group">
-                <label className="col-form-label">UserName:</label>
+                <label className="col-form-label"><i className="fas fa-user"></i>UserName</label>
                 <input type="text" name="userName"
                        className="form-control"
                        ref={register({ required: true, minLength: 3 })}/>
@@ -18,7 +18,7 @@ export default function Form(props) {
                 </p>}
             </div>
             <div className="form-group">
-                <label className="col-form-label">Password:</label>
+                <label className="col-form-label"><i className="fas fa-key"></i>Password</label>
                 <input type="password" name="passWord"
                        className="form-control"
                        ref={register({ required: true, minLength: 6 })}/>
@@ -29,7 +29,7 @@ export default function Form(props) {
             </div>
             {props.type === 'register' &&
             <div className="form-group">
-                <label className="col-form-label">Confirm Password:</label>
+                <label className="col-form-label"><i className="fas fa-check-circle"></i>Confirm Password</label>
                 <input type="password" name="confirm"
                        className="form-control"
                        ref={register({
@@ -44,7 +44,7 @@ export default function Form(props) {
                 </p>}
             </div>
             }
-            <input type="submit" className="btn btn-secondary" value={props.type}/>
+            <input type="submit" className="btn btn-secondary submit-button" value={props.type}/>
         </form>
     );
 }

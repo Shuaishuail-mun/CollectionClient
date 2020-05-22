@@ -1,0 +1,37 @@
+.loginModal{
+    color: #5e2f2f;
+    font-weight: bold;
+    background: rgb(253, 230, 203);
+    .modal-header {
+        font-family: "Bradley Hand ITC";
+        font-weight: bolder;
+        border-bottom: 1px solid #5e2f2f;
+    }
+    .modal-body{
+        i{
+            margin-right: 5px;
+        }
+        .submit-button{
+
+                appearance: none;
+                outline: 0;
+                background-color: rgba(94, 47, 47, 0.8);
+                border: 0;
+                color: #ffffff;
+                border-radius: 3px;
+                width: 100%;
+                font-weight: bolder;
+                font-size: 1.2em;
+                cursor: pointer;
+                transition-duration: 0.25s;
+
+                &:hover {
+                    background-color: #6e3737;
+                }
+
+        }
+    }
+    .modal-footer{
+        border-top: 1px solid #5e2f2f;
+    }
+}

@@ -4,13 +4,19 @@ import headImg from "../../images/add-headimg.png"
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import $ from 'jquery';
+import axios from "axios";
+import moment from "moment";
 
 class NewArtl extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            headImg: headImg,
             imgSrc: headImg,
-            cropResult: headImg
+            cropResult: headImg,
+            article: {
+                permit: 1
+            }
         };
         this.cropper = React.createRef();
         this.reader = new FileReader();
@@ -60,9 +66,71 @@ class NewArtl extends React.Component {
         document.execCommand('insertText', false, event.target.innerHTML);
         event.preventDefault();
     }
+    sendBlob(blob){
+        let data = new FormData();
+        let imgSrc = this.state.cropResult;
+        data.append('file', blob, 'headImg.png');
+        axios.post(process.env.REACT_APP_SERVER + '/users/changeHead', data, {withCredentials: true}).then(res => {
+            if(!res.data.auth) {
+                alert("login first");
+            } else {
+                if(res.data.upload) {
+                    this.setState({
+                        headImg: imgSrc
+                    });
+                }
+            }
+        });
+    }
+
+    changeHeadImg(event) {
+        this.cropper.current.getCroppedCanvas().toBlob((blob) => this.sendBlob(blob), 'image/png', 0.95);
+    }
+
+    handlePermitChange(event, value) {
+        event.preventDefault();
+        this.setState(
+            {
+                article: {
+                    permit: value
+                }
+            }
+        );
+    }
+
+    handlePublish() {
+        let title = $('#title').val();
+        let text = $('#show').html();
+        let str = $('#show').text();
+        let description = str.substring(0, str.length / 5);
+        let permit = this.state.article.permit;
+        axios.post(process.env.REACT_APP_SERVER + '/articles/add', {
+            title: title,
+            text: text,
+            description: description,
+            permit: permit
+        }, {withCredentials: true}).then(res => {
+            if(!res.data.auth) {
+                alert("login first");
+            } else {
+                if(res.data.published) {
+                    alert("successfully published");
+                }
+            }
+        });
+    }
 
     componentDidMount() {
         $('#emoji').find('button').bind('click', this.handleEmoji);
+
+        //get head image
+        axios.get(process.env.REACT_APP_SERVER + '/users/getHead', {withCredentials: true}).then(res => {
+            if(res.data.headImg) {
+                this.setState({
+                        headImg: process.env.REACT_APP_SERVER + '/users/uploads/' + res.data.headImg
+                });
+            }
+        });
     }
 
     componentWillUnmount() {
@@ -71,17 +139,17 @@ class NewArtl extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="new-article">
                 <div class="container">
                     <div class="row">
-                        <div class="left col-sm-3">
+                        <div class="left col-sm-2">
                             <div className="img-button circle" data-toggle="modal" data-target="#headImg">
-                                <img src={headImg} className="img-thumbnail"/>
+                                <img src={this.state.headImg} className="img-thumbnail"/>
                                 <span className="reveal"></span>
                             </div>
                             <div className="modal fade" id="headImg" tabIndex="-1" role="dialog" aria-hidden="true">
                                 <div className="modal-dialog modal-dialog-centered" role="document">
-                                    <div className="modal-content">
+                                    <div className="modal-content image-cropping">
                                         <div className="modal-header">
                                             <h5 className="modal-title" id="exampleModalScrollableTitle">Change Photo</h5>
                                             <button type="button" className="close" data-dismiss="modal"
@@ -113,7 +181,7 @@ class NewArtl extends React.Component {
                                             </div>
                                         </div>
                                         <div className="modal-footer">
-                                            <button onClick={(e) => alert("close")} type="button" className="btn btn-secondary"
+                                            <button onClick={(e) => this.changeHeadImg(e)} type="button" className="btn btn-info"
                                                     data-dismiss="modal">Change
                                             </button>
                                         </div>
@@ -121,88 +189,51 @@ class NewArtl extends React.Component {
                                 </div>
                             </div>
                             <h4>username</h4>
-                            <div className="list-group">
-                                <a className="list-group-item active">星期-</a>
-                                <a className="list-group-item">4月2日</a>
+                            <div className="list-group show-date">
+                                <a className="list-group-item active">{moment().format('dddd')}</a>
+                                <a className="list-group-item">{moment().format('DD MMMM')}</a>
                             </div>
-                            {/*<div id="face_panel" v-show="false" class="container">
-                                <div class="row">
-                                    <div class="col-sm-5">
-                                        <button class="upload_button">上传</button>
-                                        <div>
-                                            <canvas id="canvas" width="200" height="200"></canvas>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-7 src-file">
-                                        <a href="javascript:;" class="file">选择裁剪图片
-                                            <input type="file" name="" id="face_file"/>
-                                        </a>
-                                        <img id="face_image"/>
-                                    </div>
-                                </div>
-                            </div>*/}
                         </div>
-                    <div class="right col-sm-9">
-                        {/*<div id="image_upload" v-show="false">
-                            <div class="file-upload btn btn-primary">
-                                <span>选择图片</span>
-                                <input type="file" id="image_file" class="upload"/>
-                            </div>
-                            <input type="text" id="imageuploadurl" readonly placeholder="文件大小不超过5M"/><br/><br/>
-                                <button class="conform">确定</button>
-                        </div>
-                        <div id="music_input" v-show="false">
-                            <textarea id="music_html" class="form-control" rows="5" v-model="music_value"></textarea>
-                            <div>
-                                <span><br/>
-                                使用方式:<br/>
-                                1.在网页版（music.163.com）进入单曲、歌单、专辑、电台节目页面后，点击 “生成外链播放器” 链接。<br/>
-                                2.歌单和专辑外链播放器可以选择大中小三种尺寸，单曲和电台节目可以选择中小两种尺寸。你可以选择最适合你网站设计的尺寸。<br/>
-                                3.还可以选择是否要自动播放，打上勾后，别人查看时播放器会自动开始播放。<br/>
-                                4.最后将播放器的代码黏贴过来，大功告成！
-                                </span><br/><br/>
-                            </div>
-                            <div class="button_right"><button type="button" class="btn btn-default">确定</button></div>
-                        </div>*/}
+                    <div class="right col-sm-10">
                         <div class="editor">
-                            <div class="btn-group" role="group" aria-label="...">
-                                <button type="button" class="btn btn-default font-color" data-title="字体颜色">
+                            <div class="btn-group edit-lists" role="group" aria-label="...">
+                                <button type="button" class="btn btn-default font-color" data-toggle="tooltip" data-placement="top" title="Font Color">
                                     <i className="fas fa-font"></i>
                                     <input name="font-color" type="color" onChange={(e) => this.handleColorChange(e)}/>
                                 </button>
-                                <button type="button" class="btn btn-default back-color" data-title="背景颜色">
+                                <button type="button" class="btn btn-default back-color" data-toggle="tooltip" data-placement="top" title="Back-Color">
                                     <i className="fas fa-font"></i>
                                     <input name="back-color" type="color" defaultValue="#ffffff" onChange={(e) => this.handleColorChange(e)}/>
                                 </button>
-                                <button onClick={(e) => this.handleFormatChange('Bold', e)} type="button" class="btn btn-default" data-title="加粗">
+                                <button onClick={(e) => this.handleFormatChange('Bold', e)} type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Bold">
                                     <i className="fas fa-bold"></i>
                                 </button>
-                                <button onClick={(e) => this.handleFormatChange('removeFormat', e)} type="button" class="btn btn-default" data-title="清空格式">
+                                <button onClick={(e) => this.handleFormatChange('removeFormat', e)} type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="CLear Format">
                                     <i className="fas fa-eraser"></i>
                                 </button>
-                                <button onClick={(e) => this.handleFormatChange('italic', e)} type="button" class="btn btn-default" data-title="斜体">
+                                <button onClick={(e) => this.handleFormatChange('italic', e)} type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Italic">
                                     <i className="fas fa-italic"></i>
                                 </button>
-                                <button onClick={(e) => this.handleFormatChange('underline', e)} type="button" class="btn btn-default" data-title="下划线">
+                                <button onClick={(e) => this.handleFormatChange('underline', e)} type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Underline">
                                     <i className="fas fa-underline"></i>
                                 </button>
-                                <button onClick={(e) => this.handleFormatChange('justifyCenter', e)} type="button" class="btn btn-default" data-title="居中">
+                                <button onClick={(e) => this.handleFormatChange('justifyCenter', e)} type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Text Center">
                                     <i className="fas fa-align-center"></i>
                                 </button>
-                                <button onClick={(e) => this.handleFormatChange('justifyLeft', e)} type="button" class="btn btn-default" data-title="左对齐">
+                                <button onClick={(e) => this.handleFormatChange('justifyLeft', e)} type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Text Left">
                                     <i className="fas fa-align-left"></i>
                                 </button>
-                                <button onClick={(e) => this.handleFormatChange('justifyRight', e)} type="button" class="btn btn-default" data-title="右对齐">
+                                <button onClick={(e) => this.handleFormatChange('justifyRight', e)} type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Text Right">
                                     <i className="fas fa-align-right"></i>
                                 </button>
-                                <button onClick={(e) => this.handleFormatChange('justifyFull', e)} type="button" class="btn btn-default" data-title="文本对齐">
+                                <button onClick={(e) => this.handleFormatChange('justifyFull', e)} type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Text-Align">
                                     <i className="fas fa-align-justify"></i>
                                 </button>
-                                <button type="button" class="btn btn-default addTextImage" data-title="图片">
+                                <button type="button" class="btn btn-default addTextImage" data-toggle="tooltip" data-placement="top" title="Pictures">
                                     <i className="fas fa-image"></i>
                                     <input type="file" onChange={(e) => this.insertTextImage(e)}/>
                                 </button>
-                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addMusic" data-title="音乐">
+                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addMusic" data-toggle="tooltip" data-placement="top" title="Music">
                                     <i className="fas fa-music"></i>
                                 </button>
                                 <div className="modal fade" id="addMusic" tabIndex="-1" role="dialog" aria-hidden="true">
@@ -234,7 +265,7 @@ class NewArtl extends React.Component {
                                     </div>
                                 </div>
                                 <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-title="字体类型" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i className="fas fa-font"></i>
                                         <span class="caret"></span>
                                     </button>
@@ -299,8 +330,8 @@ class NewArtl extends React.Component {
                                         <span class="caret"></span>
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item">private</a>
-                                        <a className="dropdown-item">public</a>
+                                        <a onClick={(e) => this.handlePermitChange(e, 0)} className={`dropdown-item ${this.state.article.permit === 0 ? "active" : ""}`}>private</a>
+                                        <a onClick={(e) => this.handlePermitChange(e, 1)} className={`dropdown-item ${this.state.article.permit === 1 ? "active" : ""}`}>public</a>
                                     </div>
                                 </div>
                             </div>
@@ -311,12 +342,12 @@ class NewArtl extends React.Component {
                                     <span className="input-group-text" id="basic-addon1"><i
                                         className="fas fa-exclamation-circle"></i></span>
                                 </div>
-                                <input type="text" className="form-control" placeholder="Add a Title" aria-label="Username"
+                                <input id="title" type="text" className="form-control" placeholder="Add a Title" aria-label="Username"
                                        aria-describedby="basic-addon1"/>
                             </div>
                             <div class="publish">
                                 <span>Record your Life</span>
-                                <button type="button" class="btn btn-default">发布</button>
+                                <button type="button" onClick={() => this.handlePublish()} class="btn btn-default">Publish</button>
                             </div>
                         </div>
                     </div>
