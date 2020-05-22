@@ -25,7 +25,8 @@ class LoginPanel extends React.Component {
                     cookie.save('name', data.userName, { path: '/', maxAge: 1000});
                     cookie.save('token', res.data.token, {path: '/', maxAge: 1000});
                     // document.cookie = "name=" + data.userName;
-                    window.location.href = process.env.REACT_APP_SERVER;
+                    let href = window.location.origin;
+                    window.location.href = href;
                 } else {
                     if (type === 'login') {
                         console.log("user not exists or password not correct");

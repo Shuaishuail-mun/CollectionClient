@@ -26,7 +26,8 @@ class Navbar extends React.Component {
     handleSignOut() {
         cookie.remove('name', { path: '/' });
         cookie.remove('token', { path: '/' });
-        window.location.href = process.env.REACT_APP_SERVER;;
+        let href = window.location.origin;
+        window.location.href = href;
     }
 
     handleSearch(event) {
