@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from "react";
 import { withRouter } from 'react-router-dom';
 import axios from "axios";
 import '../../css/singleArticle.scss';
@@ -77,7 +77,6 @@ class SingleArticle extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        this.componentDidMount();
     }
 
     componentDidMount() {

@@ -37,9 +37,11 @@ function App() {
                       <Route path="/new-article">
                           <NewArticle />
                       </Route>
-                      <Route path="/single-article/:articleId">
-                          <SingleArticle />
-                      </Route>
+                      <Route path="/single-article/:articleId"
+                             render={(props) => (
+                                 <SingleArticle key={props.match.params.articleId} {...props} />)
+                             }
+                      />
                   </Switch>
               </div>
           </KeepAliveProvider>
