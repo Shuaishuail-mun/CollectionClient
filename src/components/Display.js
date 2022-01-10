@@ -11,7 +11,7 @@ class Display extends React.Component {
     }
 
     getTopMovies() {
-        fetch(process.env.REACT_APP_SERVER + '/movie', {
+        /*fetch(process.env.REACT_APP_SERVER + '/movie', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -21,7 +21,7 @@ class Display extends React.Component {
                 this.setState({
                     movies: data
                 })
-            })
+            })*/
     }
     render() {
         let movies = this.state.movies;

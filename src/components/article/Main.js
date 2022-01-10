@@ -23,7 +23,7 @@ class Main extends React.Component {
             <div>
                 <div className="container-fluid">
                     <div className="row">
-                        <div className="left col-sm-2 align-self-start">
+                        <div className="col-sm-2">
                             <div className="btn-group-vertical position-fixed" style={{opacity: '0.6'}}>
                                     <button
                                         onClick={(e) => this.handleClick(0, e)}
@@ -43,7 +43,7 @@ class Main extends React.Component {
                                 </a>*/}
                             </div>
                         </div>
-                        <div className="right col-sm-8 align-self-end">
+                        <div className="col-sm-10">
                             {this.state.panelNum === 1 && <MostPopular />}
                             {this.state.panelNum === 0 && <RecentArtls />}
                         </div>
