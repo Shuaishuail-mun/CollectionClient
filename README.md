@@ -1,5 +1,5 @@
 # Diary Project
-The front-end of the Diary website which is written in React. This webiste is used to keep a diary. Users can post and share their own diaries and comment on someone else's diaries. 
+The front-end of the Diary website which is written in React. This website is used to keep a diary. Users can post and share their own diaries and comment on someone else's diaries. 
 ## Homepage
 This page shows the newly posted diaries as well as the most popular diaries. ![image](https://user-images.githubusercontent.com/57474978/149649488-cd59cc94-ebef-44ea-8871-ca05d43c4c7f.png)
 ![image](https://user-images.githubusercontent.com/57474978/149649501-04b51a63-571a-43df-80c0-5db97298c255.png)
